@@ -1,0 +1,257 @@
+==
+happy non-conditional path has complexity of 1
+==
+const f = () => 42
+==
+expected: 1
+==
+
+==
+if adds 1
+==
+const f = (count) => {
+  let response = "s"
+  if (count > 42)
+    response += "abc"
+  return response
+}
+==
+expected complexity: 2
+==
+
+==
+if/else adds 2
+==
+const f = (count) => {
+  let response = "s"
+  if (count > 42)
+    response += "abc"
+  else
+    response += "xyz"
+  return response
+}
+==
+expected complexity: 3
+==
+
+==
+switch adds 1 per case/default
+==
+const f = (value) => {
+  let message = ""
+  switch(value) {
+    case 1:
+      message = "one"
+      break
+    case 2:
+      message = "two"
+      break
+    default:
+      message = "other"
+  }
+  return message
+}
+==
+expected complexity: 4
+==
+
+==
+for loop adds 1
+==
+const f = (n) => {
+  let sum = 0
+  for (let i = 0; i < n; i++)
+    sum += i
+  return sum
+}
+==
+expected complexity: 2
+==
+
+==
+while loop adds 1
+==
+const f = (n) => {
+  while (n > 0) {
+    console.log(n);
+    n--;
+  }
+}
+==
+expected complexity: 2
+==
+
+==
+do/while loop adds 1
+==
+const f = (n) => {
+  do {
+    console.log(n)
+    n--
+  } while (n > 0)
+}
+==
+expected complexity: 2
+==
+
+==
+each boolean operator adds 1
+==
+const f = (a, b) => {
+  if (a > 10 && b < 20)
+    console.log("In range")
+  else if (a > 10 || b > 20)
+    console.log("Out of one range")
+}
+==
+expected complexity: 5
+==
+
+==
+ternary operator adds 1
+==
+const getStatus = (age) => age >= 18 ? "Adult" : "Minor"
+==
+expected complexity: 2
+==
+
+==
+nullish coalescing operator adds 1
+==
+const getSetting = (input) => input ?? "default"
+==
+expected complexity: 2
+==
+
+==
+and operator adds 1
+==
+const check = (x, y) => x > 10 && y < 20 ? "Pass" : "Fail"
+==
+expected complexity: 4
+==
+
+==
+or operator adds 1
+==
+const validate = (input) => input == null || input === "" ? "Invalid" : "Valid"
+==
+expected complexity: 4
+==
+
+==
+old school functions work
+==
+function analyzeData(data) {
+    let result = "Initial"
+    if (data.length > 10) {
+        for (let i = 0; i < data.length; i++) {
+            if (data[i] > 100) {
+                result = data[i] % 2 === 0 ? "Even High" : "Odd High"
+            } else {
+                result = data[i] < 50 ? "Low" : "Medium"
+                if (data[i] === 25 && (data[i - 1] ?? 0) > 20) {
+                    result = "Special Twenty Five"
+                }
+            }
+        }
+    } else if (data.some(val => val < 0)) {
+        result = "Negative Values Present"
+    } else {
+        result = "Short List"
+    }
+    return result
+}
+==
+expected complexity: 12
+==
+
+==
+adds 1 for try/catch
+==
+function compute(number) {
+    try {
+        return someCall(number)
+    } catch (error) {
+        return "Error encountered"
+    }
+}
+==
+expected complexity: 2
+==
+
+==
+does not add any for nested function
+==
+const outerFunction = (data) => {
+    const nestedFunction = () => console.log("Nested function executed.");
+
+    nestedFunction();
+}
+==
+expected complexity: 1
+==
+
+==
+function outerFunction(data) {
+    console.log("Processing data:", data)
+
+    function nestedFunction() {
+        console.log("Nested function executed.")
+    }
+
+    nestedFunction()
+
+    try {
+        if (data < 0) {
+            throw new Error("Negative data not allowed")
+        }
+        console.log("Data is positive.")
+    } catch (error) {
+        console.error("Error:", error.message)
+    }
+}
+==
+expected complexity: 3
+==
+
+==
+==
+==
+expected complexity: 3
+==
+
+==
+recognizes nested functions in lambda form
+==
+const x = n =>
+  ['a', 'b', 'c']
+    .map(alpha)
+    .filter(s => s.length > 1)
+    .map(s => s[0] === 'b' ? 1 : 2)
+==
+expected complexity: 3
+==
+
+==
+can accommodate single line formatting
+==
+const x = n =>
+  ['a', 'b', 'c'].map(alpha).filter(s => s.length > 1).map(s => s[0] === 'b' ? 1 : 2)
+==
+expected complexity: 3
+==
+
+==
+includes nested callbacks
+==
+fetchData(5)
+  .then(data => {
+    console.log("Success:", data);
+  })
+  .catch(error => {
+    console.error("Error:", error);
+  });
+==
+expected complexity: 2
+==

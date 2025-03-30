@@ -1,0 +1,245 @@
+==
+Cohesion is high when all functions access a single variable
+==
+let counter = 0
+
+const increment = () => { counter++ }
+const reset = () => { counter = 0 }
+const double = () => { counter *= 2 }
+==
+expect cohesion = 1
+==
+
+==
+Cohesion remains high when functions access shared state indirectly
+==
+let value = 10
+
+const add = () => { value += 1 }
+const multiply = () => { value *= 2 }
+const report = () => { return multiply() }
+==
+expect cohesion = 1
+==
+
+==
+Cohesion drops when functions form two isolated groups
+==
+let count = 0
+let log = []
+
+const increment = () => { count++ }
+const reset = () => { count = 0 }
+
+const addLog = (msg) => { log.push(msg) }
+const clearLog = () => { log = [] }
+==
+expect cohesion = 2
+==
+
+==
+Cohesion is low when all functions access completely separate state
+==
+let a = 1
+let b = 2
+let c = 3
+
+const incA = () => { a++ }
+const incB = () => { b++ }
+const incC = () => { c++ }
+==
+expect cohesion = 3
+==
+
+==
+Cohesion remains high if a single function connects otherwise isolated ones
+==
+let x = 0
+let y = 0
+
+const useX = () => { x++ }
+const useY = () => { y++ }
+const useBoth = () => { x += 2; y += 2 }
+==
+expect cohesion = 1
+==
+
+==
+Cohesion is low when only one function accesses shared state
+==
+let score = 0
+
+const getScore = () => score
+const announce = () => "Game on!"
+const help = () => "Press start"
+==
+expect cohesion = 3
+==
+
+==
+Cohesion is trivially high in a single-function module
+==
+let cache = {}
+
+const clearCache = () => { cache = {} }
+==
+expect cohesion = 1
+==
+
+==
+filters out non-stateful (pure) functions
+==
+let shared = 0
+
+const a = () => shared++
+const b = () => shared--
+const pure1 = () => 42
+const pure2 = () => 'hi'
+==
+expect cohesion = 1
+==
+
+==
+Cohesion is high when all methods access the same field
+==
+class Counter {
+  constructor() {
+    this.count = 0
+  }
+
+  increment() { this.count++ }
+  reset() { this.count = 0 }
+  double() { this.count *= 2 }
+}
+==
+expect cohesion = 1
+==
+
+==
+Cohesion remains high when methods are connected transitively
+==
+class Tracker {
+  constructor() {
+    this.total = 0
+  }
+
+  add() { this.total += 1 }
+  multiply() { this.total *= 2 }
+  process() { this.multiply() }
+}
+==
+expect cohesion = 1
+==
+
+==
+Cohesion drops when methods form two isolated access groups
+==
+class Dual {
+  constructor() {
+    this.a = 0
+    this.b = 0
+  }
+
+  incA() { this.a++ }
+  resetA() { this.a = 0 }
+
+  incB() { this.b++ }
+  resetB() { this.b = 0 }
+}
+==
+expect cohesion = 2
+==
+
+==
+Cohesion is low when methods each access a different field
+==
+class Scatter {
+  constructor() {
+    this.x = 0
+    this.y = 0
+    this.z = 0
+  }
+
+  m1() { this.x++ }
+  m2() { this.y++ }
+  m3() { this.z++ }
+}
+==
+expect cohesion = 3
+==
+
+==
+Cohesion is preserved when one method accesses everything
+==
+class Bridge {
+  constructor() {
+    this.alpha = 1
+    this.beta = 2
+  }
+
+  onlyAlpha() { this.alpha++ }
+  onlyBeta() { this.beta++ }
+  doAll() { this.alpha += 2; this.beta += 2 }
+}
+==
+expect cohesion = 1
+==
+
+==
+Cohesion is low when some methods don’t access any fields
+==
+class Mix {
+  constructor() {
+    this.score = 0
+  }
+
+  update() { this.score++ }
+  greet() { return "hi" }
+  help() { return "press h" }
+}
+==
+expect cohesion = 3
+==
+
+==
+Cohesion is low when no methods access fields (pure class)
+==
+class Pure {
+  add(a, b) { return a + b }
+  sub(a, b) { return a - b }
+  mul(a, b) { return a * b }
+}
+==
+expect cohesion = 3
+==
+
+==
+Cohesion is trivially high in a single-method class
+==
+class OneTrick {
+  constructor() {
+    this.magic = 42
+  }
+
+  show() { return this.magic }
+}
+==
+expect cohesion = 1
+==
+
+==
+Global functions and class methods sharing the same variable are cohesive
+==
+let shared = 0
+
+class Mixer {
+  inc() { shared++ }
+  double() { shared *= 2 }
+}
+
+const reset = () => { shared = 0 }
+const triple = () => { shared *= 3 }
+==
+expect cohesion = 1
+==
+

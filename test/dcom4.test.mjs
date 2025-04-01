@@ -1,4 +1,5 @@
-import { calculateDCOM4 } from '../src/dcom4'
+import { extractGraphFromCode } from '../src/extract-graph'
+import { calculateDCOM4 } from '../src/calculate-dcom4'
 
 describe('DCOM4 cohesion metric', () => {
   const cases = [
@@ -120,12 +121,28 @@ describe('DCOM4 cohesion metric', () => {
         const triple = () => { shared *= 3 }
       `,
       expected: 1
+    },
+    {
+      description: 'sanity case',
+      code: `{
+        let shared = 0
+        class Mixer {
+          inc() { shared++ }
+          double() { shared *= 2 }
+        }
+        const reset = () => { shared = 0 }
+        const triple = () => { shared *= 3 }
+      }`,
+      expected: 1
     }
   ]
 
   for (const { description, code, expected } of cases) {
     it(description, () => {
-      expect(calculateDCOM4(code)).toBe(expected)
+      const graph = extractGraphFromCode(code)
+      console.log('graph', graph)
+      const result = calculateDCOM4(graph)
+      expect(result).toBe(expected)
     })
   }
 })

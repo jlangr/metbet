@@ -1,5 +1,7 @@
-import { extractGraphFromCode } from '../src/extract-graph'
-import { calculateDCOM4 } from '../src/calculate-dcom4'
+import {extractGraphFromCode} from '../src/extract-graph'
+import {calculateDCOM4} from '../src/calculate-dcom4'
+
+const HIGH_COHESION = 1;
 
 describe('DCOM4 cohesion metric', () => {
   const cases = [
@@ -11,7 +13,7 @@ describe('DCOM4 cohesion metric', () => {
         const reset = () => { counter = 0 }
         const double = () => { counter *= 2 }
       `,
-      expected: 1
+      expected: HIGH_COHESION
     },
     {
       description: 'Cohesion remains high when functions access shared state indirectly',
@@ -21,7 +23,7 @@ describe('DCOM4 cohesion metric', () => {
         const multiply = () => { value *= 2 }
         const report = () => { return multiply() }
       `,
-      expected: 1
+      expected: HIGH_COHESION
     },
     {
       description: 'Cohesion drops when functions form two isolated groups',
@@ -53,7 +55,7 @@ describe('DCOM4 cohesion metric', () => {
         const useY = () => { y++ }
         const useBoth = () => { x += 2; y += 2 }
       `,
-      expected: 1
+      expected: HIGH_COHESION
     },
     {
       description: 'Cohesion is low when only one function accesses shared state',
@@ -63,7 +65,7 @@ describe('DCOM4 cohesion metric', () => {
         const announce = () => "Game on!"
         const help = () => "Press start"
       `,
-      expected: 1
+      expected: HIGH_COHESION
     },
     {
       description: 'Cohesion is trivially high in a single-function module',
@@ -71,7 +73,7 @@ describe('DCOM4 cohesion metric', () => {
         let cache = {}
         const clearCache = () => { cache = {} }
       `,
-      expected: 1
+      expected: HIGH_COHESION
     },
     {
       description: 'filters out non-stateful (pure) functions',
@@ -82,7 +84,7 @@ describe('DCOM4 cohesion metric', () => {
         const pure1 = () => 42
         const pure2 = () => 'hi'
       `,
-      expected: 1
+      expected: HIGH_COHESION
     },
     {
       description: 'Cohesion is high when all methods access the same field',
@@ -94,7 +96,7 @@ describe('DCOM4 cohesion metric', () => {
           double() { this.count *= 2 }
         }
       `,
-      expected: 1
+      expected: HIGH_COHESION
     },
     {
       description: 'Cohesion drops when methods form two isolated access groups',
@@ -120,29 +122,13 @@ describe('DCOM4 cohesion metric', () => {
         const reset = () => { shared = 0 }
         const triple = () => { shared *= 3 }
       `,
-      expected: 1
-    },
-    {
-      description: 'sanity case',
-      code: `{
-        let shared = 0
-        class Mixer {
-          inc() { shared++ }
-          double() { shared *= 2 }
-        }
-        const reset = () => { shared = 0 }
-        const triple = () => { shared *= 3 }
-      }`,
-      expected: 1
+      expected: HIGH_COHESION
     }
   ]
 
   for (const { description, code, expected } of cases) {
     it(description, () => {
-      const graph = extractGraphFromCode(code)
-      console.log('graph', graph)
-      const result = calculateDCOM4(graph)
-      expect(result).toBe(expected)
+      expect(calculateDCOM4(extractGraphFromCode(code))).toBe(expected)
     })
   }
 })

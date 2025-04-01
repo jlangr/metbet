@@ -12,70 +12,51 @@ const parseOptions = {
 export const extractGraphFromCode = (code) => {
   const ast = parse(code, parseOptions)
 
-  const accesses = {}    // function -> Set of state accesses
-  const calls = {}       // function -> Set of called function names
+  const accesses = {} // fnName → Set<state>
+  const calls = {}    // fnName → Set<fnName>
   const nodes = new Set()
 
-  let currentFunction = null
-
   traverse(ast, {
-    enter(path) {
-      if (
-        path.isFunctionDeclaration() ||
-        path.isFunctionExpression() ||
-        path.isArrowFunctionExpression() ||
-        path.isClassMethod()
-      ) {
-        const name = getFunctionName(path)
-        if (!name) return
+    FunctionDeclaration(path) {
+      const name = path.node.id?.name
+      if (!name) return
 
-        currentFunction = name
-        accesses[currentFunction] = new Set()
-        calls[currentFunction] = new Set()
-        nodes.add(currentFunction)
-      }
+      const { accessed, called } = extractAccessAndCalls(path)
+      accesses[name] = accessed
+      calls[name] = called
+      nodes.add(name)
+    },
 
-      // Collect accesses inside current function
-      if (currentFunction) {
-        if (path.isMemberExpression()) {
-          if (t.isThisExpression(path.node.object) && t.isIdentifier(path.node.property)) {
-            accesses[currentFunction].add(`this.${path.node.property.name}`)
-          } else if (t.isIdentifier(path.node.object)) {
-            accesses[currentFunction].add(path.node.object.name)
-          }
-        }
+    VariableDeclarator(path) {
+      const id = path.node.id
+      const init = path.get('init')
 
-        if (path.isIdentifier()) {
-          if (
-            !isLocalVariable(path) &&
-            path.node.name !== 'undefined'
-          ) {
-            accesses[currentFunction].add(path.node.name)
-          }
-        }
+      if (!t.isIdentifier(id)) return
+      const name = id.name
 
-        if (path.isCallExpression()) {
-          const callee = path.node.callee
-          if (t.isIdentifier(callee)) {
-            calls[currentFunction].add(callee.name)
-          }
-        }
+      if (init.isFunctionExpression() || init.isArrowFunctionExpression()) {
+        const { accessed, called } = extractAccessAndCalls(init)
+        accesses[name] = accessed
+        calls[name] = called
+        nodes.add(name)
       }
     },
 
-    exit(path) {
-      if (
-        path.isFunctionDeclaration() ||
-        path.isFunctionExpression() ||
-        path.isArrowFunctionExpression() ||
-        path.isClassMethod()
-      ) {
-        currentFunction = null
-      }
+    ClassMethod(path) {
+      const className = path.findParent(p => p.isClassDeclaration())?.node.id?.name
+      const methodName = path.node.key.name
+      if (methodName === 'constructor') return
+
+      const name = `${className}#${methodName}`
+      const { accessed, called } = extractAccessAndCalls(path)
+
+      accesses[name] = accessed
+      calls[name] = called
+      nodes.add(name)
     }
   })
 
-  // Propagate transitive accesses via call graph
+  // Expand transitive accesses via function calls
   const resolvedAccesses = {}
   for (const fn of nodes) {
     resolvedAccesses[fn] = new Set(accesses[fn] || [])
@@ -100,7 +81,6 @@ export const extractGraphFromCode = (code) => {
     }
   }
 
-  // Filter out pure functions
   const filteredNodes = [...nodes].filter(fn => resolvedAccesses[fn] && resolvedAccesses[fn].size > 0)
 
   const edges = {}
@@ -119,6 +99,45 @@ export const extractGraphFromCode = (code) => {
   }
 
   return { nodes: filteredNodes, edges }
+}
+
+const extractAccessAndCalls = (fnPath) => {
+  const accessed = new Set()
+  const called = new Set()
+
+  fnPath.traverse({
+    MemberExpression(p) {
+      if (t.isThisExpression(p.node.object) && t.isIdentifier(p.node.property)) {
+        accessed.add(`this.${p.node.property.name}`)
+      } else if (t.isIdentifier(p.node.object)) {
+        accessed.add(p.node.object.name)
+      }
+    },
+    Identifier(p) {
+      if (
+        !isLocalVariable(p) &&
+        p.node.name !== 'undefined'
+      ) {
+        accessed.add(p.node.name)
+      }
+    },
+    CallExpression(p) {
+      const callee = p.node.callee
+      if (t.isIdentifier(callee)) {
+        called.add(callee.name)
+      }
+    }
+  })
+
+  return { accessed, called }
+}
+
+const isLocalVariable = (path) => {
+  const binding = path.scope.getBinding(path.node.name)
+  if (!binding) return false
+
+  // Only consider it local if it's declared in the same function scope
+  return path.scope === binding.scope
 }
 
 const getFunctionName = (path) => {
@@ -140,18 +159,3 @@ const getFunctionName = (path) => {
 
   return null
 }
-
-const isLocalVariable = (path) => {
-  const binding = path.scope.getBinding(path.node.name)
-  if (!binding) return false
-
-  return path.scope === binding.scope
-}
-// const isLocalVariable = (path) => {
-//   const binding = path.scope.getBinding(path.node.name)
-//   if (!binding) return false
-//
-//   return binding.scope.block.type === 'FunctionDeclaration' ||
-//     binding.scope.block.type === 'FunctionExpression' ||
-//     binding.scope.block.type === 'ArrowFunctionExpression'
-// }

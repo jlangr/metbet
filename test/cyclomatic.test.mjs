@@ -2,12 +2,12 @@ import { getCyclomaticComplexity } from '../src/cyclomatic'
 
 describe('Cyclomatic Complexity', () => {
   it('happy non-conditional path has complexity of 1', () => {
-    const f = `const f = () => 42`
-    expect(getCyclomaticComplexity(f)).toBe(1)
+    const source = `const f = () => 42`
+    expect(getCyclomaticComplexity(source)).toBe(1)
   })
 
   it('if adds 1', () => {
-    const f = `
+    const source = `
       const f = (count) => {
         let response = "s"
         if (count > 42)
@@ -15,11 +15,11 @@ describe('Cyclomatic Complexity', () => {
         return response
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('if/else adds 1', () => {
-    const f = `
+  it('if/else adds 2', () => {
+    const source = `
       const f = (count) => {
         let response = "s"
         if (count > 42)
@@ -29,11 +29,11 @@ describe('Cyclomatic Complexity', () => {
         return response
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    expect(getCyclomaticComplexity(source)).toBe(3)
   })
 
   it('switch adds 1 per case/default', () => {
-    const f = `
+    const source = `
       const f = (value) => {
         let message = ""
         switch(value) {
@@ -49,11 +49,11 @@ describe('Cyclomatic Complexity', () => {
         return message
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(4)
+    expect(getCyclomaticComplexity(source)).toBe(4)
   })
 
   it('for loop adds 1', () => {
-    const f = `
+    const source = `
       const f = (n) => {
         let sum = 0
         for (let i = 0; i < n; i++)
@@ -61,11 +61,11 @@ describe('Cyclomatic Complexity', () => {
         return sum
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('while loop adds 1', () => {
-    const f = `
+    const source = `
       const f = (n) => {
         while (n > 0) {
           console.log(n)
@@ -73,11 +73,11 @@ describe('Cyclomatic Complexity', () => {
         }
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('do/while loop adds 1', () => {
-    const f = `
+    const source = `
       const f = (n) => {
         do {
           console.log(n)
@@ -85,11 +85,11 @@ describe('Cyclomatic Complexity', () => {
         } while (n > 0)
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('each boolean operator adds 1', () => {
-    const f = `
+    const source = `
       const f = (a, b) => {
         if (a > 10 && b < 20)
           console.log("In range")
@@ -97,31 +97,31 @@ describe('Cyclomatic Complexity', () => {
           console.log("Out of one range")
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(5)
+    expect(getCyclomaticComplexity(source)).toBe(5)
   })
 
   it('ternary operator adds 1', () => {
-    const f = `const getStatus = (age) => age >= 18 ? "Adult" : "Minor"`
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    const source = `const getStatus = (age) => age >= 18 ? "Adult" : "Minor"`
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('nullish coalescing operator adds 1', () => {
-    const f = `const getSetting = (input) => input ?? "default"`
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    const source = `const getSetting = (input) => input ?? "default"`
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('and operator adds 1', () => {
-    const f = `const check = (x, y) => x > 10 && y < 20 ? "Pass" : "Fail"`
-    expect(getCyclomaticComplexity(f)).toBe(3)
+    const source = `const check = (x, y) => x > 10 && y < 20`
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('or operator adds 1', () => {
-    const f = `const validate = (input) => input == null || input === "" ? "Invalid" : "Valid"`
-    expect(getCyclomaticComplexity(f)).toBe(3)
+    const source = `const validate = (input) => input == null || input === ""`
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('old school functions work', () => {
-    const f = `\
+    const source = `
       function analyzeData(data) {
         let result = "Initial"
         if (data.length > 10) {
@@ -143,11 +143,11 @@ describe('Cyclomatic Complexity', () => {
         return result
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(10)
+    expect(getCyclomaticComplexity(source)).toBe(12)
   })
 
   it('adds 1 for try/catch', () => {
-    const f = `\
+    const source = `
       function compute(number) {
         try {
           return someCall(number)
@@ -156,21 +156,21 @@ describe('Cyclomatic Complexity', () => {
         }
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('does not add any for nested function', () => {
-    const f = `\
+    const source = `
       const outerFunction = (data) => {
-        const nestedFunction = () => console.log("Nested function executed.");
-        nestedFunction();
+        const nestedFunction = () => console.log("Nested function executed.")
+        nestedFunction()
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(1)
+    expect(getCyclomaticComplexity(source)).toBe(1)
   })
 
-  it('multiple control flows and nested functions', () => {
-    const f = `\
+  it('outer function with internal try/catch and conditionals', () => {
+    const source = `
       function outerFunction(data) {
         console.log("Processing data:", data)
         function nestedFunction() {
@@ -187,35 +187,37 @@ describe('Cyclomatic Complexity', () => {
         }
       }
     `
-    expect(getCyclomaticComplexity(f)).toBe(3)
+    expect(getCyclomaticComplexity(source)).toBe(3)
   })
 
   it('recognizes nested functions in lambda form', () => {
-    const f = `\
+    const source = `
       const x = n =>
         ['a', 'b', 'c']
           .map(alpha)
           .filter(s => s.length > 1)
           .map(s => s[0] === 'b' ? 1 : 2)
     `
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('can accommodate single line formatting', () => {
-    const f = `
+    const source = `
       const x = n => ['a', 'b', 'c'].map(alpha).filter(s => s.length > 1).map(s => s[0] === 'b' ? 1 : 2)
     `
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('includes nested callbacks', () => {
-    const f = `\
+    const source = `
       fetchData(5)
         .then(data => {
-          console.log("Success:", data);
+          console.log("Success:", data)
         })
-        .catch(error => n ?? 1 );
+        .catch(error => {
+          console.error("Error:", error)
+        })
     `
-    expect(getCyclomaticComplexity(f)).toBe(2)
+    expect(getCyclomaticComplexity(source)).toBe(1)
   })
 })

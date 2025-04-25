@@ -1,5 +1,5 @@
-import {extractGraphFromCode} from '../src/extract-graph'
-import {calculateDCOM4} from '../src/calculate-dcom4'
+import {extractGraphFromCode} from '../../../src/metrics/extract-graph.js'
+import {calculateDCOM4} from '../../../src/metrics/calculate-dcom4.mjs'
 
 const HIGH_COHESION = 1;
 

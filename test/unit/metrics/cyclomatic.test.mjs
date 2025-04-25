@@ -1,4 +1,4 @@
-import { getCyclomaticComplexity } from '../src/cyclomatic'
+import { getCyclomaticComplexity } from '../../../src/metrics/cyclomatic.mjs'
 
 describe('Cyclomatic Complexity', () => {
   it('happy non-conditional path has complexity of 1', () => {
@@ -18,7 +18,7 @@ describe('Cyclomatic Complexity', () => {
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('if/else adds 2', () => {
+  it('if/else adds 1', () => {
     const source = `
       const f = (count) => {
         let response = "s"
@@ -29,7 +29,7 @@ describe('Cyclomatic Complexity', () => {
         return response
       }
     `
-    expect(getCyclomaticComplexity(source)).toBe(3)
+    expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
   it('switch adds 1 per case/default', () => {
@@ -143,7 +143,7 @@ describe('Cyclomatic Complexity', () => {
         return result
       }
     `
-    expect(getCyclomaticComplexity(source)).toBe(12)
+    expect(getCyclomaticComplexity(source)).toBe(10)
   })
 
   it('adds 1 for try/catch', () => {

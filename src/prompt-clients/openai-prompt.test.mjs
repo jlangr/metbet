@@ -1,5 +1,5 @@
 import {jest} from '@jest/globals'
-import {prompt} from '../../../src/prompt-clients/openai-prompt'
+import {prompt} from './openai-prompt.mjs'
 
 global.fetch = jest.fn()
 

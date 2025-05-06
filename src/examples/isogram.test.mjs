@@ -1,4 +1,4 @@
-import {isIsogram as isIsogram, isIsogramOld} from '../../../src/examples/isogram.js'
+import {isIsogram as isIsogram, isIsogramOld} from './isogram.js'
 
 
 // [isIsogram, isIsogramOld].forEach(isIsogram =>

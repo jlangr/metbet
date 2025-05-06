@@ -1,4 +1,4 @@
-import { getCyclomaticComplexity } from '../../../src/metrics/cyclomatic.mjs'
+import { getCyclomaticComplexity } from './cyclomatic.mjs'
 
 describe('Cyclomatic Complexity', () => {
   it('happy non-conditional path has complexity of 1', () => {

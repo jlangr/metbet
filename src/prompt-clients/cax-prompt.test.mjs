@@ -18,7 +18,6 @@ describe('prompt', () => {
 
     const userMessage = result[3]
     expect(userMessage.type).toEqual(PromptMessageType.USER)
-    console.log('text: ', userMessage.text)
     expect(userMessage.text).toContain(`text
 
 Examples:

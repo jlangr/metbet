@@ -1,26 +1,31 @@
 import { PromptMessageType } from './promptMessageType.mjs'
 import { PromptMessage } from './promptMessage.mjs'
 
-export const ASSISTANT_GUIDELINES = `You're a Java programming assistant. When asked to generate solution code,
+export const ASSISTANT_GUIDELINES = `You're a JavaScript programming assistant. When asked to generate solution code,
 include only code. Don't include any explanation. Don't include comments in any code.`
-export const CODE_STYLE = `- When possible, prefer functional solutions, with functional methods and immutable classes. Avoid side effects.
-- Extract implementation specifics to separate cohesive methods.
+export const CODE_STYLE = `- Extract implementation specifics to separate cohesive functions.
 - Extract conditionals to separate predicate methods.
-- Minimize use of temporary variables. Make calls to methods instead.`
-export const LANGUAGE_SPECIFIC_CODE_STYLE = `- Within chained calls using the streams interface, extract lambda bodies with implementation details to separate methods.
-- Create instance-side methods by default. Do not use static methods unless appropriate or otherwise asked.
-- In tests, do not start the name of the test method with the word "test".`
+- Minimize use of temporary variables. Make calls to functions instead.
+- Do not generate comments. Create readable code instead.`
+export const LANGUAGE_SPECIFIC_CODE_STYLE = `- In function pipelines, do not create inline functions. Extract lambda bodies with implementation details to named separate functions
+- Do not use semicolons to terminate statements
+- Generate ES2024+ code
+- Always use import, not require
+- Generate const arrow functions
+- Group related tests with 'describe' functions
+- Use 'it' and not 'test' to declare tests
+`
 
-const PROMPT_OVERVIEW = `Generate JUnit test class(es) and production Java code for the solution.
+const PROMPT_OVERVIEW = `Generate jest test class(es) and production Java code for the solution.
 In output, begin each code listing with a header in either the form:
-/* test class TestFileName.java */
+/* test module file-name.test.mjs */
 or:
-/* prod class ProdFileName.java */
+/* prod class file-name.mjs */
 End each code listing with a footer, either:
-/* end test class */
+/* end test module */
 or:
-/* end prod class */.
-Substitute the real file name for TestFileName and ProdFileName.`
+/* end prod module */.
+Substitute the real base file name for 'file-name'.`
 const PROMPT_HEADER = 'Generate code for this:'
 const EXAMPLES_HEADER = 'Examples:'
 

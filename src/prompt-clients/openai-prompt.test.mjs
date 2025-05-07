@@ -1,5 +1,5 @@
 import {jest} from '@jest/globals'
-import {prompt} from './openai-prompt.mjs'
+import {sendPrompt} from './openai-prompt.mjs'
 
 global.fetch = jest.fn()
 
@@ -12,7 +12,7 @@ describe('promptOpenAI', () => {
       })
     })
 
-    const response = await prompt('input prompt')
+    const response = await sendPrompt('input prompt')
 
     const calledWith = fetch.mock.calls[0][1]
     expect(fetch).toHaveBeenCalledWith(

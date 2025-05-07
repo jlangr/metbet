@@ -20,7 +20,7 @@ const PROMPT_OVERVIEW = `Generate jest test class(es) and production Java code f
 In output, begin each code listing with a header in either the form:
 /* test module file-name.test.mjs */
 or:
-/* prod class file-name.mjs */
+/* prod module file-name.mjs */
 End each code listing with a footer, either:
 /* end test module */
 or:
@@ -38,7 +38,7 @@ export const createPrompt = (promptText, exampleList) => {
     promptText,
     '',
     EXAMPLES_HEADER,
-    exampleList.isEmpty() ? '' : '',
+    '',
     exampleList.toPromptText()
   ].join('\n')
 

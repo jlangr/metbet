@@ -21,7 +21,7 @@ const fetchOpenAI = async (body) => {
   return res.json()
 }
 
-export const prompt = async (content) => {
+export const sendPrompt = async (content) => {
   return parseResponse(await fetchOpenAI({
     model: 'gpt-4',
     messages: createMessage(content),

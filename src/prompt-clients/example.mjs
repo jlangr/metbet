@@ -1,6 +1,14 @@
-export const createExample = (id, name, text) => ({
-  id,
-  name,
-  text,
-  toPromptText: () => `${name}: ${name}\n${text}`
-})
+export const createExample = (id, name, text) => {
+  const formatPromptText = () => {
+    if (!name || name.trim() === '') return text
+    return `name: ${name}\n${text}`
+  }
+
+  return {
+    id,
+    name,
+    text,
+    isEnabled: () => true,
+    toPromptText: formatPromptText
+  }
+}

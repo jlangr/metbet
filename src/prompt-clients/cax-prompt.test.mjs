@@ -1,6 +1,6 @@
 import { createPrompt, ASSISTANT_GUIDELINES, CODE_STYLE, LANGUAGE_SPECIFIC_CODE_STYLE } from './cax-prompt.mjs'
-import { PromptMessageType } from './promptMessageType.mjs'
-import { PromptMessage } from './promptMessage.mjs'
+import { PromptMessageType } from './prompt-message-type.mjs'
+import { PromptMessage } from './prompt-message.mjs'
 import { createExampleList } from './example-list.mjs'
 import { createExample } from './example.mjs'
 

@@ -1,5 +1,5 @@
-import { PromptMessageType } from './promptMessageType.mjs'
-import { PromptMessage } from './promptMessage.mjs'
+import { PromptMessageType } from './prompt-message-type.mjs'
+import { PromptMessage } from './prompt-message.mjs'
 
 export const ASSISTANT_GUIDELINES = `You're a JavaScript programming assistant. When asked to generate solution code,
 include only code. Don't include any explanation. Don't include comments in any code.`

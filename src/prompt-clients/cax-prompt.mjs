@@ -14,6 +14,10 @@ export const LANGUAGE_SPECIFIC_CODE_STYLE = `- In function pipelines, do not cre
 - Generate const arrow functions
 - Group related tests with 'describe' functions
 - Use 'it' and not 'test' to declare tests
+- Do not import the jest functions like 'it' and 'describe'
+- Name source files using hyphens, not camel case
+- Name all source files with an extension of .mjs
+- Name test files usng the pattern target-module-name.test.mjs
 `
 
 const PROMPT_OVERVIEW = `Generate jest test class(es) and production Java code for the solution.

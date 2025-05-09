@@ -63,6 +63,7 @@ describe('codeResponseSplitter', () => {
     const files = CodeResponseSplitter().split(response)
     console.log(files)
   })
+
   it('splits multiple files', () => {
     const response = `/* prod module fizz-buzz.mjs */
 ${fizzBuzzProdSource}

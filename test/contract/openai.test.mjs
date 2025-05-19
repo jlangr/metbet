@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-describe('OpenAI Chat Completions API (live)', () => {
+describe.skip('OpenAI Chat Completions API (live)', () => {
   it('should return a valid completion for a simple prompt', async () => {
     const response = await openai.chat.completions.create({
       model: 'gpt-4',

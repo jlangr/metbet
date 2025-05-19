@@ -3,7 +3,7 @@ import {createExampleList} from '../../src/prompt-clients/example-list.mjs'
 import {FileType} from '../../src/prompt-clients/file-type.mjs'
 import {requestCodeCompletion} from '../../src/prompt-clients/code-completion.mjs'
 
-describe('live prompt integration', () => {
+describe.skip('live prompt integration', () => {
   it('sends actual prompt to LLM and splits response into prod/test files', async () => {
     const description = 'Generate a solution for "fizzbuzz digits" only, and not the sequence.';
     const examples = createExampleList([

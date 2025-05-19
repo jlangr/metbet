@@ -1,20 +1,29 @@
 import {module} from '../js/modules.mjs'
-import {mapRange} from "../js/js.mjs";
+import {mapRange} from "../js/js.mjs"
 
 const count = 3
 
-const prodModuleFilename = i => `examples/nameNormalizer/source.${i + 1}.mjs`;
+class ProdModule {
+  constructor(index) {
+    this.prodModuleFilename = `examples/nameNormalizer/source.${index + 1}.mjs`
+  }
 
-describe.each(mapRange(count, i => module(prodModuleFilename(i))))
-('source', (modulePath) => {
-  let functionUnderTest
+  async load() {
+    this.mod = await import(module(this.prodModuleFilename))
+  }
 
+  get functionUnderTest() {
+    return this.mod.myFunction
+  }
+}
+
+describe.each(mapRange(count, i => new ProdModule(i)))
+('source', module => {
   beforeEach(async () => {
-    const mod = await import(modulePath)
-    functionUnderTest = mod.myFunction
+    await module.load()
   })
 
   it('does something', () => {
-    expect(functionUnderTest()).toEqual('hey 1')
+    expect(module.functionUnderTest()).toEqual('hey 1')
   })
 })

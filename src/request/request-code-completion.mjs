@@ -1,6 +1,6 @@
-import {createPrompt} from './cax-prompt.mjs'
-import {sendPrompt} from './openai-prompt.mjs'
-import {CodeResponseSplitter} from './code-response-splitter.mjs'
+import {createPrompt} from './prompt/cax-prompt.mjs'
+import {sendPrompt} from './llms/openai/openai-prompt.mjs'
+import {CodeResponseSplitter} from './extract/code-response-splitter.mjs'
 
 export const requestCodeCompletion = async (promptText, examples) => {
   const prompt = createPrompt(promptText, examples)

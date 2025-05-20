@@ -1,7 +1,7 @@
-import {createExample} from '../../src/prompt-clients/example.mjs'
-import {createExampleList} from '../../src/prompt-clients/example-list.mjs'
-import {FileType} from '../../src/prompt-clients/file-type.mjs'
-import {requestCodeCompletion} from '../../src/prompt-clients/code-completion.mjs'
+import {createExample} from '../../src/request/prompt/example.mjs'
+import {createExampleList} from '../../src/request/prompt/example-list.mjs'
+import {FileType} from '../../src/request/extract/file-type.mjs'
+import {requestCodeCompletion} from '../../src/request/request-code-completion.mjs'
 
 describe.skip('live prompt integration', () => {
   it('sends actual prompt to LLM and splits response into prod/test files', async () => {

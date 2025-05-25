@@ -23,7 +23,7 @@ const fetchOpenAI = async (body) => {
 
 export const sendPrompt = async (content) => {
   return parseResponse(await fetchOpenAI({
-    model: 'gpt-4',
+    model: 'gpt-4-turbo',
     messages: createMessage(content),
     temperature: 0
   }))

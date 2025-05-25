@@ -1,8 +1,10 @@
 import { PromptMessageType } from './prompt-message-type.mjs'
 import { PromptMessage } from './prompt-message.mjs'
 
-export const ASSISTANT_GUIDELINES = `You're a JavaScript programming assistant. When asked to generate solution code,
-include only code. Don't include any explanation. Don't include comments in any code.`
+export const ASSISTANT_GUIDELINES = `You're a JavaScript programming assistant currently used for LLM research. When asked to generate solution code,
+include only code. Don't include any explanation. Don't include comments in any code.
+- DO NOT use any 3rd-party libraries (e.g. Ramda, Lodash)! Only use standard ES2024+ JavaScript. Assume no dependencies can be imported.
+- If you ignore this, the code will break our research.`
 export const CODE_STYLE = `- Extract implementation specifics to separate cohesive functions.
 - Extract conditionals to separate predicate methods.
 - Minimize use of temporary variables. Make calls to functions instead.
@@ -13,7 +15,8 @@ export const LANGUAGE_SPECIFIC_PROD_CODE_STYLE = `- In function pipelines, do no
 - Always use import, not require
 - Generate const arrow functions
 - Name source files using hyphens, not camel case
-- Name all source files with an extension of .mjs`
+- Name all source files with an extension of .mjs
+`
 export const LANGUAGE_SPECIFIC_TEST_CODE_STYLE = `- Group related tests with 'describe' functions
 - Use 'it' and not 'test' to declare tests
 - Do not import the jest functions like 'it' and 'describe'

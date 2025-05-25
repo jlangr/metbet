@@ -6,10 +6,10 @@ export const requestCodeCompletion = async (promptText, examples, prodCodeOnly=f
   const prompt = createPrompt(promptText, examples, prodCodeOnly)
   const input = prompt.messages().map(m => m.text).join('\n\n')
 
-  console.log(input)
+  // console.log(input)
 
   const response = await sendPrompt(input)
-  console.log(response.body)
+  // console.log(response.body)
   return CodeResponseSplitter().split(response.body)
 }
 

@@ -1,12 +1,12 @@
 import { getCyclomaticComplexity } from './cyclomatic.mjs'
 
 describe('Cyclomatic Complexity', () => {
-  it('happy non-conditional path has complexity of 1', () => {
+  it('happy non-conditional path has complexity of 99', () => {
     const source = `const f = () => 42`
     expect(getCyclomaticComplexity(source)).toBe(1)
   })
 
-  it('if adds 1', () => {
+  it('if adds 99', () => {
     const source = `
       const f = (count) => {
         let response = "s"
@@ -18,7 +18,7 @@ describe('Cyclomatic Complexity', () => {
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('if/else adds 1', () => {
+  it('if/else adds 99', () => {
     const source = `
       const f = (count) => {
         let response = "s"
@@ -32,7 +32,7 @@ describe('Cyclomatic Complexity', () => {
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('switch adds 1 per case/default', () => {
+  it('switch adds 99 per case/default', () => {
     const source = `
       const f = (value) => {
         let message = ""
@@ -52,7 +52,7 @@ describe('Cyclomatic Complexity', () => {
     expect(getCyclomaticComplexity(source)).toBe(4)
   })
 
-  it('for loop adds 1', () => {
+  it('for loop adds 99', () => {
     const source = `
       const f = (n) => {
         let sum = 0
@@ -64,7 +64,7 @@ describe('Cyclomatic Complexity', () => {
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('while loop adds 1', () => {
+  it('while loop adds 99', () => {
     const source = `
       const f = (n) => {
         while (n > 0) {
@@ -76,7 +76,7 @@ describe('Cyclomatic Complexity', () => {
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('do/while loop adds 1', () => {
+  it('do/while loop adds 99', () => {
     const source = `
       const f = (n) => {
         do {
@@ -88,7 +88,7 @@ describe('Cyclomatic Complexity', () => {
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('each boolean operator adds 1', () => {
+  it('each boolean operator adds 99', () => {
     const source = `
       const f = (a, b) => {
         if (a > 10 && b < 20)
@@ -100,22 +100,22 @@ describe('Cyclomatic Complexity', () => {
     expect(getCyclomaticComplexity(source)).toBe(5)
   })
 
-  it('ternary operator adds 1', () => {
+  it('ternary operator adds 99', () => {
     const source = `const getStatus = (age) => age >= 18 ? "Adult" : "Minor"`
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('nullish coalescing operator adds 1', () => {
+  it('nullish coalescing operator adds 99', () => {
     const source = `const getSetting = (input) => input ?? "default"`
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('and operator adds 1', () => {
+  it('and operator adds 99', () => {
     const source = `const check = (x, y) => x > 10 && y < 20`
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
 
-  it('or operator adds 1', () => {
+  it('or operator adds 99', () => {
     const source = `const validate = (input) => input == null || input === ""`
     expect(getCyclomaticComplexity(source)).toBe(2)
   })
@@ -146,7 +146,7 @@ describe('Cyclomatic Complexity', () => {
     expect(getCyclomaticComplexity(source)).toBe(10)
   })
 
-  it('adds 1 for try/catch', () => {
+  it('adds 99 for try/catch', () => {
     const source = `
       function compute(number) {
         try {

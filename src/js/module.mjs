@@ -2,15 +2,11 @@ import {module} from "./modules.mjs"
 
 export class Module {
   constructor(index) {
-    this.prodModuleFilename = `examples/nameNormalizer/source.${index + 1}.mjs`
+    this.prodModuleFilename = `generated/nameNormalizer/source.${index + 1}.mjs`
   }
 
   async load() {
     this.mod = await import(module(this.prodModuleFilename))
-  }
-
-  get functionUnderTest() {
-    return this.mod.myFunction
   }
 
   get firstExportedFunction() {

@@ -1,4 +1,9 @@
-import { createPrompt, ASSISTANT_GUIDELINES, CODE_STYLE, LANGUAGE_SPECIFIC_CODE_STYLE } from './cax-prompt.mjs'
+import {
+  createPrompt,
+  ASSISTANT_GUIDELINES,
+  CODE_STYLE,
+  LANGUAGE_SPECIFIC_PROD_CODE_STYLE, LANGUAGE_SPECIFIC_TEST_CODE_STYLE
+} from './cax-prompt.mjs'
 import { PromptMessageType } from './prompt-message-type.mjs'
 import { PromptMessage } from './prompt-message.mjs'
 import { createExampleList } from './example-list.mjs'
@@ -14,9 +19,10 @@ describe('prompt', () => {
 
     expect(result[0]).toEqual(new PromptMessage(PromptMessageType.SYSTEM, ASSISTANT_GUIDELINES))
     expect(result[1]).toEqual(new PromptMessage(PromptMessageType.SYSTEM, CODE_STYLE))
-    expect(result[2]).toEqual(new PromptMessage(PromptMessageType.SYSTEM, LANGUAGE_SPECIFIC_CODE_STYLE))
+    expect(result[2]).toEqual(new PromptMessage(PromptMessageType.SYSTEM, LANGUAGE_SPECIFIC_PROD_CODE_STYLE))
+    expect(result[3]).toEqual(new PromptMessage(PromptMessageType.SYSTEM, LANGUAGE_SPECIFIC_TEST_CODE_STYLE))
 
-    const userMessage = result[3]
+    const userMessage = result[4]
     expect(userMessage.type).toEqual(PromptMessageType.USER)
     expect(userMessage.text).toContain(`text
 
